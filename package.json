@@ -8,11 +8,11 @@
     "start": "next start"
   {
   "dependencies": {
-    "@react-three/drei": "^9.122.0",
-    "@react-three/fiber": "^8.17.14",
-    "three": "^0.176.0",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "three": "^0.176.0",
+    "@react-three/fiber": "^8.17.14",
+    "@react-three/drei": "^9.122.0"
   }
 }
