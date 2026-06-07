@@ -1,60 +1,25 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 
 export default function Home() {
-  const [message, setMessage] = useState("");
-  const [reply, setReply] = useState("");
-  const [search, setSearch] = useState("");
-
   const games = [
     {
-      name: "Obby Adventure",
+      title: "Obby Adventure",
       slug: "obby-adventure",
-      players: "1.2K"
+      description: "Jump across obstacles and reach the finish."
     },
     {
-      name: "Racing World",
+      title: "Racing World",
       slug: "racing-world",
-      players: "850"
+      description: "Race against other players."
     },
     {
-      name: "Survival Island",
+      title: "Survival Island",
       slug: "survival-island",
-      players: "2.3K"
-    },
-    {
-      name: "Battle Arena",
-      slug: "battle-arena",
-      players: "3.1K"
+      description: "Gather resources and survive."
     }
   ];
-
-  const filteredGames = games.filter((game) =>
-    game.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  async function askBot() {
-    if (!message.trim()) return;
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message
-        })
-      });
-
-      const data = await res.json();
-      setReply(data.reply);
-    } catch {
-      setReply("AI unavailable right now.");
-    }
-  }
 
   return (
     <main
@@ -62,33 +27,69 @@ export default function Home() {
         minHeight: "100vh",
         background: "#0f0f0f",
         color: "white",
-        fontFamily: "Arial"
+        fontFamily: "Arial, sans-serif"
       }}
     >
-      <nav
+      {/* Header */}
+      <header
         style={{
-          background: "#181818",
-          padding: "20px 40px",
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center"
+          alignItems: "center",
+          padding: "20px 40px",
+          background: "#181818"
         }}
       >
-        <h1 style={{ margin: 0 }}>RBLX</h1>
+        <h1>RBLX</h1>
 
-        <button
-          style={{
-            padding: "10px 20px",
-            borderRadius: "8px",
-            border: "none",
-            cursor: "pointer"
-          }}
-        >
-          Login
-        </button>
-      </nav>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <Link href="/users/noobmaster">
+            <button
+              style={{
+                padding: "10px 16px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer"
+              }}
+            >
+              👤 Profile
+            </button>
+          </Link>
 
-      <section style={{ padding: "40px" }}>
+          <Link href="/friends">
+            <button
+              style={{
+                padding: "10px 16px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer"
+              }}
+            >
+              👥 Friends
+            </button>
+          </Link>
+
+          <Link href="/avatar-shop">
+            <button
+              style={{
+                padding: "10px 16px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer"
+              }}
+            >
+              😀 Avatar Shop
+            </button>
+          </Link>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section
+        style={{
+          padding: "60px 40px"
+        }}
+      >
         <h2
           style={{
             fontSize: "48px",
@@ -100,129 +101,125 @@ export default function Home() {
 
         <p
           style={{
-            color: "#aaa",
-            marginBottom: "30px"
+            fontSize: "22px",
+            color: "#aaa"
           }}
         >
           Create, play, and share games.
         </p>
+      </section>
 
-        <input
-          type="text"
-          placeholder="Search games..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "15px",
-            borderRadius: "10px",
-            border: "none",
-            marginBottom: "30px",
-            fontSize: "16px"
-          }}
-        />
+      {/* Games */}
+      <section
+        style={{
+          padding: "0 40px 60px"
+        }}
+      >
+        <h2>🎮 Featured Games</h2>
 
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
-            gap: "20px"
+            gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+            gap: "20px",
+            marginTop: "20px"
           }}
         >
-          {filteredGames.map((game) => (
+          {games.map((game) => (
             <div
               key={game.slug}
               style={{
-                background: "#1f1f1f",
-                borderRadius: "12px",
+                background: "#1d1d1d",
+                borderRadius: "16px",
                 padding: "20px"
               }}
             >
               <div
                 style={{
-                  height: "140px",
+                  height: "180px",
                   background: "#333",
                   borderRadius: "10px",
                   marginBottom: "15px"
                 }}
               />
 
-              <h3>{game.name}</h3>
+              <h3>{game.title}</h3>
 
-              <p style={{ color: "#aaa" }}>
-                {game.players} players online
+              <p
+                style={{
+                  color: "#bbb"
+                }}
+              >
+                {game.description}
               </p>
 
               <Link href={`/games/${game.slug}`}>
                 <button
                   style={{
+                    marginTop: "10px",
                     padding: "10px 20px",
                     borderRadius: "8px",
                     border: "none",
                     cursor: "pointer"
                   }}
                 >
-                  Play
+                  Play Game
                 </button>
               </Link>
             </div>
           ))}
         </div>
+      </section>
 
-        <div
+      {/* AI Section */}
+      <section
+        style={{
+          margin: "40px",
+          background: "#1d1d1d",
+          borderRadius: "16px",
+          padding: "30px"
+        }}
+      >
+        <h2>🤖 AI Assistant</h2>
+
+        <p style={{ color: "#aaa" }}>
+          AI assistant integration coming soon.
+        </p>
+
+        <input
+          placeholder="Ask about games..."
           style={{
-            marginTop: "50px",
-            background: "#1f1f1f",
-            padding: "25px",
-            borderRadius: "12px"
+            width: "100%",
+            padding: "15px",
+            marginTop: "15px",
+            borderRadius: "10px",
+            border: "none"
+          }}
+        />
+
+        <button
+          style={{
+            marginTop: "10px",
+            padding: "10px 20px",
+            borderRadius: "8px",
+            border: "none",
+            cursor: "pointer"
           }}
         >
-          <h2>🤖 AI Assistant</h2>
-
-          <p style={{ color: "#aaa" }}>
-            Ask questions about games or the RBLX platform.
-          </p>
-
-          <input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Ask something..."
-            style={{
-              width: "100%",
-              padding: "15px",
-              borderRadius: "10px",
-              border: "none",
-              marginTop: "10px"
-            }}
-          />
-
-          <button
-            onClick={askBot}
-            style={{
-              marginTop: "10px",
-              padding: "10px 20px",
-              borderRadius: "8px",
-              border: "none",
-              cursor: "pointer"
-            }}
-          >
-            Send
-          </button>
-
-          {reply && (
-            <div
-              style={{
-                marginTop: "15px",
-                background: "#2d2d2d",
-                padding: "15px",
-                borderRadius: "8px"
-              }}
-            >
-              {reply}
-            </div>
-          )}
-        </div>
+          Send
+        </button>
       </section>
+
+      {/* Footer */}
+      <footer
+        style={{
+          textAlign: "center",
+          padding: "30px",
+          color: "#777"
+        }}
+      >
+        © 2025 RBLX Platform
+      </footer>
     </main>
   );
 }
