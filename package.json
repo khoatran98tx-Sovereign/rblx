@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
-  {
+  },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "next": "^15.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "three": "^0.176.0",
     "@react-three/fiber": "^8.17.14",
     "@react-three/drei": "^9.122.0"
