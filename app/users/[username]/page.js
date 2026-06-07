@@ -1,29 +1,38 @@
 import AvatarViewer from "../../components/AvatarViewer";
+
 export default function ProfilePage({ params }) {
   const users = {
     noobmaster: {
       username: "noobmaster",
-      avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=noobmaster",
       bio: "I love building obbies.",
       friends: 42,
       games: 5,
-      joined: "2025"
+      joined: "2025",
     },
     builderman: {
       username: "builderman",
-      avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=builderman",
       bio: "Creating awesome games.",
       friends: 120,
       games: 18,
-      joined: "2024"
-    }
+      joined: "2024",
+    },
   };
 
   const user = users[params.username];
 
   if (!user) {
     return (
-      <main style={{ padding: 40, color: "white", background: "#111", minHeight: "100vh" }}>
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "#111",
+          color: "white",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontFamily: "Arial",
+        }}
+      >
         <h1>User Not Found</h1>
       </main>
     );
@@ -36,41 +45,76 @@ export default function ProfilePage({ params }) {
         background: "#111",
         color: "white",
         fontFamily: "Arial",
-        padding: "40px"
+        padding: "40px",
       }}
     >
       <div
         style={{
+          maxWidth: "900px",
+          margin: "0 auto",
           background: "#1f1f1f",
           borderRadius: "16px",
           padding: "30px",
-          maxWidth: "800px",
-          margin: "auto"
         }}
       >
-<AvatarViewer />
-
-        <h1>{user.username}</h1>
-
-        <p>{user.bio}</p>
-
-        <hr />
-
-        <h3>📅 Joined: {user.joined}</h3>
-        <h3>👥 Friends: {user.friends}</h3>
-        <h3>🎮 Games Created: {user.games}</h3>
-
-        <button
+        <div
           style={{
-            padding: "12px 24px",
-            borderRadius: "8px",
-            border: "none",
-            cursor: "pointer",
-            marginTop: "20px"
+            display: "flex",
+            gap: "30px",
+            flexWrap: "wrap",
+            alignItems: "center",
           }}
         >
-          Add Friend
-        </button>
+          <div>
+            <AvatarViewer />
+          </div>
+
+          <div>
+            <h1
+              style={{
+                marginBottom: "10px",
+                fontSize: "42px",
+              }}
+            >
+              {user.username}
+            </h1>
+
+            <p
+              style={{
+                color: "#aaa",
+                marginBottom: "20px",
+              }}
+            >
+              {user.bio}
+            </p>
+
+            <div
+              style={{
+                display: "grid",
+                gap: "10px",
+              }}
+            >
+              <div>📅 Joined: {user.joined}</div>
+              <div>👥 Friends: {user.friends}</div>
+              <div>🎮 Games Created: {user.games}</div>
+            </div>
+
+            <button
+              style={{
+                marginTop: "20px",
+                padding: "12px 24px",
+                borderRadius: "8px",
+                border: "none",
+                background: "#2563eb",
+                color: "white",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Add Friend
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   );
