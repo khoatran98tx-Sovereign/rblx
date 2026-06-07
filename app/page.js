@@ -1,25 +1,42 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const games = [
-    { name: "Obby Adventure", players: "1.2K" },
-    { name: "Racing World", players: "850" },
-    { name: "Survival Island", players: "2.3K" },
-    { name: "Zombie Escape", players: "600" },
-    { name: "Sky Tycoon", players: "1.8K" },
-    { name: "Battle Arena", players: "3.4K" }
+    {
+      name: "Obby Adventure",
+      slug: "obby-adventure",
+      players: "1.2K"
+    },
+    {
+      name: "Racing World",
+      slug: "racing-world",
+      players: "850"
+    },
+    {
+      name: "Survival Island",
+      slug: "survival-island",
+      players: "2.3K"
+    },
+    {
+      name: "Battle Arena",
+      slug: "battle-arena",
+      players: "3.1K"
+    }
   ];
+
+  const filteredGames = games.filter((game) =>
+    game.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   async function askBot() {
     if (!message.trim()) return;
-
-    setLoading(true);
 
     try {
       const res = await fetch("/api/chat", {
@@ -33,35 +50,31 @@ export default function Home() {
       });
 
       const data = await res.json();
-
-      setReply(data.reply || "No response received.");
-      setMessage("");
-    } catch (error) {
-      setReply("Error connecting to AI.");
+      setReply(data.reply);
+    } catch {
+      setReply("AI unavailable right now.");
     }
-
-    setLoading(false);
   }
 
   return (
     <main
       style={{
-        background: "#111",
-        color: "white",
         minHeight: "100vh",
-        fontFamily: "Arial, sans-serif"
+        background: "#0f0f0f",
+        color: "white",
+        fontFamily: "Arial"
       }}
     >
       <nav
         style={{
-          padding: "20px",
-          background: "#1b1b1b",
+          background: "#181818",
+          padding: "20px 40px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center"
         }}
       >
-        <h2 style={{ margin: 0 }}>RBLX</h2>
+        <h1 style={{ margin: 0 }}>RBLX</h1>
 
         <button
           style={{
@@ -76,24 +89,38 @@ export default function Home() {
       </nav>
 
       <section style={{ padding: "40px" }}>
-        <h1
+        <h2
           style={{
             fontSize: "48px",
             marginBottom: "10px"
           }}
         >
           Discover Games
-        </h1>
+        </h2>
 
         <p
           style={{
-            color: "#bbb",
-            fontSize: "20px",
-            marginBottom: "40px"
+            color: "#aaa",
+            marginBottom: "30px"
           }}
         >
           Create, play, and share games.
         </p>
+
+        <input
+          type="text"
+          placeholder="Search games..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "15px",
+            borderRadius: "10px",
+            border: "none",
+            marginBottom: "30px",
+            fontSize: "16px"
+          }}
+        />
 
         <div
           style={{
@@ -102,13 +129,13 @@ export default function Home() {
             gap: "20px"
           }}
         >
-          {games.map((game) => (
+          {filteredGames.map((game) => (
             <div
-              key={game.name}
+              key={game.slug}
               style={{
-                background: "#222",
-                padding: "20px",
-                borderRadius: "12px"
+                background: "#1f1f1f",
+                borderRadius: "12px",
+                padding: "20px"
               }}
             >
               <div
@@ -126,16 +153,18 @@ export default function Home() {
                 {game.players} players online
               </p>
 
-              <button
-                style={{
-                  padding: "10px 16px",
-                  borderRadius: "8px",
-                  border: "none",
-                  cursor: "pointer"
-                }}
-              >
-                Play
-              </button>
+              <Link href={`/games/${game.slug}`}>
+                <button
+                  style={{
+                    padding: "10px 20px",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer"
+                  }}
+                >
+                  Play
+                </button>
+              </Link>
             </div>
           ))}
         </div>
@@ -143,50 +172,49 @@ export default function Home() {
         <div
           style={{
             marginTop: "50px",
-            background: "#222",
+            background: "#1f1f1f",
             padding: "25px",
             borderRadius: "12px"
           }}
         >
           <h2>🤖 AI Assistant</h2>
 
-          <p style={{ color: "#bbb" }}>
+          <p style={{ color: "#aaa" }}>
             Ask questions about games or the RBLX platform.
           </p>
 
           <input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Ask the AI something..."
+            placeholder="Ask something..."
             style={{
               width: "100%",
-              padding: "12px",
-              marginTop: "10px",
-              marginBottom: "10px",
-              borderRadius: "8px",
-              border: "none"
+              padding: "15px",
+              borderRadius: "10px",
+              border: "none",
+              marginTop: "10px"
             }}
           />
 
           <button
             onClick={askBot}
-            disabled={loading}
             style={{
+              marginTop: "10px",
               padding: "10px 20px",
               borderRadius: "8px",
               border: "none",
               cursor: "pointer"
             }}
           >
-            {loading ? "Thinking..." : "Send"}
+            Send
           </button>
 
           {reply && (
             <div
               style={{
                 marginTop: "15px",
+                background: "#2d2d2d",
                 padding: "15px",
-                background: "#333",
                 borderRadius: "8px"
               }}
             >
