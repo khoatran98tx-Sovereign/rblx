@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function Home() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const games = [
     { name: "Obby Adventure", players: "1.2K" },
@@ -15,11 +16,31 @@ export default function Home() {
     { name: "Battle Arena", players: "3.4K" }
   ];
 
-  function askBot() {
+  async function askBot() {
     if (!message.trim()) return;
 
-    setReply(`AI Bot: You said "${message}"`);
-    setMessage("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message
+        })
+      });
+
+      const data = await res.json();
+
+      setReply(data.reply || "No response received.");
+      setMessage("");
+    } catch (error) {
+      setReply("Error connecting to AI.");
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -42,22 +63,25 @@ export default function Home() {
       >
         <h2 style={{ margin: 0 }}>RBLX</h2>
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button
-            style={{
-              padding: "10px 20px",
-              borderRadius: "8px",
-              border: "none",
-              cursor: "pointer"
-            }}
-          >
-            Login
-          </button>
-        </div>
+        <button
+          style={{
+            padding: "10px 20px",
+            borderRadius: "8px",
+            border: "none",
+            cursor: "pointer"
+          }}
+        >
+          Login
+        </button>
       </nav>
 
       <section style={{ padding: "40px" }}>
-        <h1 style={{ fontSize: "48px", marginBottom: "10px" }}>
+        <h1
+          style={{
+            fontSize: "48px",
+            marginBottom: "10px"
+          }}
+        >
           Discover Games
         </h1>
 
@@ -74,7 +98,7 @@ export default function Home() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
             gap: "20px"
           }}
         >
@@ -127,7 +151,7 @@ export default function Home() {
           <h2>🤖 AI Assistant</h2>
 
           <p style={{ color: "#bbb" }}>
-            Ask questions about games or the platform.
+            Ask questions about games or the RBLX platform.
           </p>
 
           <input
@@ -146,6 +170,7 @@ export default function Home() {
 
           <button
             onClick={askBot}
+            disabled={loading}
             style={{
               padding: "10px 20px",
               borderRadius: "8px",
@@ -153,7 +178,7 @@ export default function Home() {
               cursor: "pointer"
             }}
           >
-            Send
+            {loading ? "Thinking..." : "Send"}
           </button>
 
           {reply && (
