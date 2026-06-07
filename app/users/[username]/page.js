@@ -1,3 +1,4 @@
+import AvatarViewer from "../../components/AvatarViewer";
 export default function ProfilePage({ params }) {
   const users = {
     noobmaster: {
@@ -47,16 +48,7 @@ export default function ProfilePage({ params }) {
           margin: "auto"
         }}
       >
-        <img
-          src={user.avatar}
-          alt="Avatar"
-          width={150}
-          height={150}
-          style={{
-            borderRadius: "50%",
-            background: "#333"
-          }}
-        />
+<AvatarViewer />
 
         <h1>{user.username}</h1>
 
